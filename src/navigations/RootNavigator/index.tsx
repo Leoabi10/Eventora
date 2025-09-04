@@ -6,16 +6,18 @@ import Home from '../../Screens/Home/Home';
 import Login from '../../Screens/Login/Login';
 import User from '../../Screens/User/User';
 import BottomTabs from '../../Components/bottomNavigation';
+import OnboardScreen from '../../Screens/Onboard/onboardScreen';
 
 export type RootStackParamList = {
   Login: undefined;
   MainDrawer: undefined;
+  onBoard: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const Drawer = createDrawerNavigator();
 
-function MainDrawer() {
+export function MainDrawer() {
   return (
     <Drawer.Navigator
     screenOptions={{headerShown: false, swipeEnabled: true, swipeEdgeWidth: 100}}>
@@ -28,9 +30,10 @@ function MainDrawer() {
 const RootNavigator = () => {
   return (
     <Stack.Navigator
-      initialRouteName="MainDrawer"
+      initialRouteName="onBoard"
       screenOptions={{ headerShown: false, animation: 'fade' }}>
       
+      <Stack.Screen name="onBoard" component={OnboardScreen} />
       <Stack.Screen name="Login" component={Login} />
       
       <Stack.Screen name="MainDrawer" component={MainDrawer} />
