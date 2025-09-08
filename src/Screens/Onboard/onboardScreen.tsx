@@ -1,6 +1,7 @@
-import { FlatList, StyleSheet, View, ViewToken } from 'react-native';
-import React from 'react';
+import { Dimensions, FlatList, StatusBar, StyleSheet, View, ViewToken } from 'react-native';
+import React, { useState } from 'react';
 import Animated, {
+  useAnimatedProps,
   useAnimatedRef,
   useAnimatedScrollHandler,
   useSharedValue,
@@ -9,21 +10,29 @@ import data, { onboardingData } from './onboard';
 import OnboardRender from '../../Components/onBoardRender/onboardRender';
 import OnboardPagination from '../../Components/onBoardRender/OnboardPagination';
 import OnboardCustomButton from '../../Components/onBoardRender/OnboardCustomButton';
+import Svg, { Circle } from 'react-native-svg';
+
+const { width, height } = Dimensions.get('window');
+const CIRCLE_LENGTH = 219; // circumference
+const RADIUS = CIRCLE_LENGTH / (2 * Math.PI);
+
+const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 
 function OnboardScreen() {
+  const [itemIndex, setItemIndex] = useState(0);
   const flatListRef = useAnimatedRef<FlatList<onboardingData>>();
   const x = useSharedValue(0);
   const flatListIndex = useSharedValue(0);
 
-  const onViewableItemsChanged = ({
-    viewableItems,
-  }: {
-    viewableItems: ViewToken[];
-  }) => {
-    if (viewableItems[0]?.index !== null) {
-      flatListIndex.value = viewableItems[0].index ?? 0;
-    }
-  };
+  const animatedProps = useAnimatedProps(() => ({
+    strokeDashoffset: CIRCLE_LENGTH * 0.25,
+  }));
+  const animatedPropsTwo = useAnimatedProps(() => ({
+    strokeDashoffset: CIRCLE_LENGTH * 0.75,
+  }));
+  const animatedPropsThree = useAnimatedProps(() => ({
+    strokeDashoffset: CIRCLE_LENGTH * 0.5,
+  }));
 
   const onScroll = useAnimatedScrollHandler({
     onScroll: (event) => {
@@ -31,8 +40,20 @@ function OnboardScreen() {
     },
   });
 
+  const onViewableItemsChanged = React.useCallback(
+    ({ viewableItems }: { viewableItems: ViewToken[] }) => {
+      if (viewableItems.length > 0 && viewableItems[0].index !== undefined) {
+        const index = viewableItems[0].index!;
+        setItemIndex(index);
+        flatListIndex.value = index;
+      }
+    },
+    []
+  );  
+
   return (
     <View style={styles.container}>
+      <StatusBar barStyle="light-content" backgroundColor="black" />
       <Animated.FlatList
         ref={flatListRef}
         data={data}
@@ -45,7 +66,7 @@ function OnboardScreen() {
         bounces={false}
         showsHorizontalScrollIndicator={false}
         onScroll={onScroll}
-        scrollEventThrottle={16} 
+        scrollEventThrottle={16}
         onViewableItemsChanged={onViewableItemsChanged}
         viewabilityConfig={{
           minimumViewTime: 300,
@@ -53,14 +74,109 @@ function OnboardScreen() {
         }}
       />
 
+      {/* Bottom Container */}
       <View style={styles.bottomContainer}>
-        <OnboardPagination data={data} x={x} />
+        <View style={styles.progressWrapper}>
+          <Svg
+            width={width * 0.25} // responsive width
+            height={width * 0.25}
+            // viewBox={`0 0 ${width / 2} ${width / 2}`} // scalable viewBox
+          >
+            {/* Base Circle */}
+            <Circle
+              cx="50%"
+              cy="50%"
+              r={RADIUS}
+              stroke="#4285F4"
+              strokeWidth={5}
+              strokeDasharray={CIRCLE_LENGTH}
+              strokeDashoffset={CIRCLE_LENGTH * 1.25}
+              fill="transparent"
+            />
+
+            {itemIndex >= 1 && (
+              <AnimatedCircle
+                cx="50%"
+                cy="50%"
+                r={RADIUS}
+                stroke="#EA4335"
+                strokeWidth={5}
+                strokeDasharray={CIRCLE_LENGTH}
+                animatedProps={animatedPropsTwo}
+                fill="transparent"
+              />
+            )}
+
+            {itemIndex >= 2 && (
+              <>
+               <AnimatedCircle
+                cx="50%"
+                cy="50%"
+                r={RADIUS}
+                stroke="#34A853"
+                strokeWidth={5}
+                strokeDasharray={CIRCLE_LENGTH}
+                animatedProps={animatedPropsThree}
+                fill="transparent"
+              />
+              <AnimatedCircle
+              cx="50%"
+              cy="50%"
+              r={RADIUS}
+              stroke="#EA4335"
+              strokeWidth={5}
+              strokeDasharray={CIRCLE_LENGTH}
+              animatedProps={animatedPropsTwo}
+              fill="transparent"
+            />
+             
+              </>
+            )}
+
+            {itemIndex >= 3 && (
+              <>
+              <AnimatedCircle
+                cx="50%"
+                cy="50%"
+                r={RADIUS}
+                stroke="#FBBC04"
+                strokeWidth={5}
+                strokeDasharray={CIRCLE_LENGTH}
+                animatedProps={animatedProps}
+                fill="transparent"
+              />
+              <AnimatedCircle
+                cx="50%"
+                cy="50%"
+                r={RADIUS}
+                stroke="#34A853"
+                strokeWidth={5}
+                strokeDasharray={CIRCLE_LENGTH}
+                animatedProps={animatedPropsThree}
+                fill="transparent"
+              />
+              <AnimatedCircle
+              cx="50%"
+              cy="50%"
+              r={RADIUS}
+              stroke="#EA4335"
+              strokeWidth={5}
+              strokeDasharray={CIRCLE_LENGTH}
+              animatedProps={animatedPropsTwo}
+              fill="transparent"
+            />
+            </>
+            )}
+          </Svg>
+        </View>
+
         <OnboardCustomButton
           flatListRef={flatListRef}
           flatListIndex={flatListIndex}
           dataLength={data.length}
           x={x}
         />
+        <OnboardPagination data={data} x={x} />
       </View>
     </View>
   );
@@ -77,10 +193,11 @@ const styles = StyleSheet.create({
     bottom: 20,
     left: 0,
     right: 0,
-    marginHorizontal: 30,
-    paddingVertical: 30,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-end',
     alignItems: 'center',
+  },
+  progressWrapper: {
+    position: "absolute",
+    bottom: 16
   },
 });

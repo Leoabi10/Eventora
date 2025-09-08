@@ -1,80 +1,49 @@
-import React, { useState } from 'react'
-import { Image, ImageBackground, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import React from 'react'
+import { Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import Fa from 'react-native-vector-icons/Ionicons';
 import GradientText from '../../Components/GradientText/GradientText';
 import { useNavigation } from '@react-navigation/native';
-import Checkbox from '../../Components/Checkbox/Checkbox';
 
 type Props = {}
 
-const Login = (props: Props) => {
-  const [isChecked, setIsChecked] = useState(false);
+const WelcomeScreen = (props: Props) => {
   const navigation = useNavigation();
 
   return (
-    
     <View style={styles.container}>
       <View style={styles.topContainer}>
         <ImageBackground source={require("../../../Assets/Images/linear_gradient_login.png")} style={styles.linearBackground}>
-            <TouchableOpacity onPress={() => navigation.goBack()} style={{width: "7%", position: "absolute", left: 15, top: 15}}>
-                <Fa name="arrow-back" size={26} color="white" />
-            </TouchableOpacity>
           <Image source={require("../../../Assets/Images/appIcon.png")} style={styles.loginAppIcon} />
         </ImageBackground>
       </View>
-      <KeyboardAvoidingView
-    behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-    style={styles.downContainer}
-  >
-    <ScrollView
-      contentContainerStyle={{ justifyContent: 'center', alignItems: 'center', paddingBottom: 20, gap: 29 }}
-      showsVerticalScrollIndicator= {false}
-      keyboardShouldPersistTaps="handled"
-    >
+      <View style={styles.downContainer}>
         <View>
-          <Text style={styles.welcomeText}>Welcome back !</Text>
-        </View>
-        <View style={{gap: 25, width: "100%"}}>
-          <TextInput placeholder='Username' style={styles.textInput}/>
-          <TextInput placeholder='Password' style={styles.textInput}/>
-          <View style={{flexDirection: "row", justifyContent: "space-between"}}>
-            <TouchableOpacity >
-            <Checkbox
-              label="Remember me"
-              size={18}
-              checkedColor="#7B2FF7"
-              uncheckedColor="#999"
-              defaultChecked={isChecked}
-              onChange={(val) => setIsChecked(val)}
-            />
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <Text>Forgot password?</Text>
-            </TouchableOpacity>
-          </View>
+          <Text style={styles.welcomeText}>Welcome !</Text>
         </View>
         <View style={{ gap: 20 }}>
           <LinearGradient
             colors={['#000000', '#4A6CF7', '#7B2FF7']}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 1 }}
+            style={{ borderRadius: 100 }}
+          >
+            <TouchableOpacity style={styles.createAccountAndLoginButton} onPress={() => navigation.navigate("Register")}>
+
+              <Text style={styles.createAccountAndLoginText}>Create Account</Text>
+
+            </TouchableOpacity>
+          </LinearGradient>
+          <LinearGradient
+            colors={['#000000', '#4A6CF7', '#7B2FF7']}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
             style={{ padding: 2.5, borderRadius: 100 }}
           >
-            <TouchableOpacity style={{ borderRadius: 100, alignItems: "center", justifyContent: 'center', backgroundColor: "#fff", padding: 10, paddingHorizontal: 140 }}>
+            <TouchableOpacity style={{ borderRadius: 100, alignItems: "center", justifyContent: 'center', backgroundColor: "#fff", padding: 10, paddingHorizontal: 140 }} onPress={() => navigation.navigate("Login")}>
               <GradientText text="Login" style={{fontSize: 20, fontWeight: "500"}}/>
             </TouchableOpacity>
           </LinearGradient>
-          <View style={{flexDirection: "row", alignItems: "center", justifyContent: "center"}}>
-            <Text>New user? </Text>
-            <TouchableOpacity onPress={() => navigation.navigate("Register")}><GradientText text="Sign Up" style={{fontSize: 15, fontWeight: "bold"}} /></TouchableOpacity>
-          </View>
-          <View style={{flexDirection: "row"}}>
-            <Text style={{opacity: 0.5}}>_________________________  </Text>
-            <GradientText text="OR" style={{fontSize: 15, fontWeight: "bold", top: 3}} />
-            <Text style={{opacity: 0.5}}>  ________________________</Text>
-          </View>
         </View>
         <View style={{ gap: 10 }}>
           <View style={styles.socialLogin}>
@@ -103,14 +72,12 @@ const Login = (props: Props) => {
             <Text>Sign in with another account</Text>
           </View>
         </View>
-      </ScrollView>
-    </KeyboardAvoidingView>
+      </View>
     </View>
-    
   )
 }
 
-export default Login
+export default WelcomeScreen;
 
 const styles = StyleSheet.create({
   container: {
@@ -131,7 +98,7 @@ const styles = StyleSheet.create({
     bottom: "4%"
   },
   downContainer: {
-    height: "60%",
+    height: "53%",
     alignItems: "center",
     justifyContent: "center",
     gap: 40
@@ -150,20 +117,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 100,
-    padding: 15,
+    padding: 10,
     paddingHorizontal: 80
   },
   createAccountAndLoginText: {
     fontSize: 25,
     color: "white",
     fontWeight: "400"
-  },
-  textInput: {
-    borderWidth: 0.2,
-    borderColor: "black",
-    borderRadius: 100,
-    paddingHorizontal: 20,
-    height: 60,
-    backgroundColor: "#F0F0F0"
   }
 })

@@ -40,8 +40,8 @@ const Dot = ({index,x}: Props) => {
   const animatedColor = useAnimatedStyle(() => {
     const background = interpolateColor(
         x.value,
-        [0, SCREEN_WIDTH, 2 * SCREEN_WIDTH],
-        ['#4285F4','#EA4335','#34A853']
+        [0, SCREEN_WIDTH, 2 * SCREEN_WIDTH, 3 * SCREEN_WIDTH],
+        ['#4285F4','#EA4335','#34A853', '#FBBC04']
     );
     return{
         backgroundColor: background

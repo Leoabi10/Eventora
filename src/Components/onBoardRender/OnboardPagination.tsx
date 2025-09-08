@@ -1,4 +1,4 @@
-import { StyleSheet, View, Text } from "react-native";
+import { StyleSheet, View, Text, Dimensions } from "react-native";
 import React from "react";
 import { onboardingData } from "../../Screens/Onboard/onboard";
 import { SharedValue } from "react-native-reanimated";
@@ -10,8 +10,9 @@ type Props = {
 };
 
 const OnboardPagination = ({data,x}:Props) => {
+    const {width,height} = Dimensions.get('window')
     return(
-        <View style={styles.paginationConatiner}>
+        <View style={[styles.paginationConatiner,{top: width/30}]}>
             {data.map((_,index) => {
                 return <Dot index={index} x={x}/>
             })}
@@ -26,6 +27,6 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         height: 40,
         justifyContent: "center",
-        alignItems: "center"
+        alignItems: "center",
     }
 })

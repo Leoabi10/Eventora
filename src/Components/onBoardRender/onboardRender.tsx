@@ -61,6 +61,11 @@ const OnboardRender = ({item,index,x}: Props) => {
             borderRadius: SCREEN_WIDTH/2
           }, circleAnimation]}/>
         </View>
+
+        <View style={{ height: "12%", justifyContent: "space-between"}}>
+          <Text style={[styles.titleText,{color: item.textColor}]}>{item.title}</Text>
+          <Text style={[styles.subText]}>{item.text}</Text>
+        </View>
         <Animated.View style={lottieAnimationStyle}>
           <LottieView
           source={item.animation}
@@ -68,10 +73,6 @@ const OnboardRender = ({item,index,x}: Props) => {
           autoPlay
           loop={true}/>
         </Animated.View>
-        <View style={{bottom: SCREEN_WIDTH/12}}>
-          <Text style={[styles.titleText,{color: item.textColor}]}>{item.title}</Text>
-          <Text style={[styles.subText]}>{item.text}</Text>
-        </View>
     </View>
   );
 }
@@ -80,10 +81,9 @@ export default OnboardRender;
 
 const styles = StyleSheet.create({
   itemContainer: {
-    flex: 1,
-    justifyContent: "space-around",
+    height: "80%",
     alignItems: "center",
-
+    justifyContent: "space-around"
   },
   titleText: {
     fontSize: 30,
@@ -93,7 +93,8 @@ const styles = StyleSheet.create({
   subText: {
     fontSize: 15,
     textAlign: "center",
-    width: 320
+    color: "white",
+    fontWeight: "bold"
   },
   circleContainer: {
     ...StyleSheet.absoluteFillObject,
