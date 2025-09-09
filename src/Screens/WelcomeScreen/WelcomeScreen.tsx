@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 80
   },
   createAccountAndLoginText: {
-    fontSize: 25,
+    fontSize: 20,
     color: "white",
     fontWeight: "400"
   }

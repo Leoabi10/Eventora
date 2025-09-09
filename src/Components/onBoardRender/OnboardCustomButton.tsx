@@ -51,9 +51,9 @@ const OnboardCustomButton = ({dataLength, flatListIndex, flatListRef, x} : Props
         } else{
             navigation.navigate("WelcomeScreen")
         }
-    }} style={{justifyContent: "center", alignItems: "center"}}> 
+    }} style={{ justifyContent: "center", alignItems: "center"}}> 
         
-        <Animated.View style={[styles.container, animatedColor, buttonAnimationStyle]}>
+        <Animated.View style={[styles.container, animatedColor]}>
             <Animated.Image source={require("../../../Assets/right_arrow.png")} style={[styles.arrow]} />
         </Animated.View>
     </TouchableOpacity>
@@ -68,6 +68,8 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         overflow: "hidden",
+        paddingHorizontal: 40,
+        paddingVertical: 40
     },
     arrow: {
         position: "absolute",

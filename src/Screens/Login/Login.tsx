@@ -11,102 +11,125 @@ type Props = {}
 
 const Login = (props: Props) => {
   const [isChecked, setIsChecked] = useState(false);
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+
   const navigation = useNavigation();
 
+  const handleLogin = async () => {
+    try {
+      const response = await fetch("http://localhost:5000/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password })
+      });
+      const data = await response.json();
+      if (response.ok) {
+        console.log("Login success:", data);
+        // Save token in AsyncStorage or Redux
+      } else {
+        console.log("Login failed:", data.message);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
+
   return (
-    
+
     <View style={styles.container}>
       <View style={styles.topContainer}>
         <ImageBackground source={require("../../../Assets/Images/linear_gradient_login.png")} style={styles.linearBackground}>
-            <TouchableOpacity onPress={() => navigation.goBack()} style={{width: "7%", position: "absolute", left: 15, top: 15}}>
-                <Fa name="arrow-back" size={26} color="white" />
-            </TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.goBack()} style={{ width: "7%", position: "absolute", left: 15, top: 15 }}>
+            <Fa name="arrow-back" size={26} color="white" />
+          </TouchableOpacity>
           <Image source={require("../../../Assets/Images/appIcon.png")} style={styles.loginAppIcon} />
         </ImageBackground>
       </View>
       <KeyboardAvoidingView
-    behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-    style={styles.downContainer}
-  >
-    <ScrollView
-      contentContainerStyle={{ justifyContent: 'center', alignItems: 'center', paddingBottom: 20, gap: 29 }}
-      showsVerticalScrollIndicator= {false}
-      keyboardShouldPersistTaps="handled"
-    >
-        <View>
-          <Text style={styles.welcomeText}>Welcome back !</Text>
-        </View>
-        <View style={{gap: 25, width: "100%"}}>
-          <TextInput placeholder='Username' style={styles.textInput}/>
-          <TextInput placeholder='Password' style={styles.textInput}/>
-          <View style={{flexDirection: "row", justifyContent: "space-between"}}>
-            <TouchableOpacity >
-            <Checkbox
-              label="Remember me"
-              size={18}
-              checkedColor="#7B2FF7"
-              uncheckedColor="#999"
-              defaultChecked={isChecked}
-              onChange={(val) => setIsChecked(val)}
-            />
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <Text>Forgot password?</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-        <View style={{ gap: 20 }}>
-          <LinearGradient
-            colors={['#000000', '#4A6CF7', '#7B2FF7']}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 1 }}
-            style={{ padding: 2.5, borderRadius: 100 }}
-          >
-            <TouchableOpacity style={{ borderRadius: 100, alignItems: "center", justifyContent: 'center', backgroundColor: "#fff", padding: 10, paddingHorizontal: 140 }}>
-              <GradientText text="Login" style={{fontSize: 20, fontWeight: "500"}}/>
-            </TouchableOpacity>
-          </LinearGradient>
-          <View style={{flexDirection: "row", alignItems: "center", justifyContent: "center"}}>
-            <Text>New user? </Text>
-            <TouchableOpacity onPress={() => navigation.navigate("Register")}><GradientText text="Sign Up" style={{fontSize: 15, fontWeight: "bold"}} /></TouchableOpacity>
-          </View>
-          <View style={{flexDirection: "row"}}>
-            <Text style={{opacity: 0.5}}>_________________________  </Text>
-            <GradientText text="OR" style={{fontSize: 15, fontWeight: "bold", top: 3}} />
-            <Text style={{opacity: 0.5}}>  ________________________</Text>
-          </View>
-        </View>
-        <View style={{ gap: 10 }}>
-          <View style={styles.socialLogin}>
-            <LinearGradient
-              colors={['#000000', '#4A6CF7', '#7B2FF7']}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
-              style={{ width: 40, height: 40, borderRadius: 100, alignItems: "center", justifyContent: "center" }}
-            >
-              <TouchableOpacity>
-                <Icon name="google" size={25} color="#fff" />
-              </TouchableOpacity>
-            </LinearGradient>
-            <LinearGradient
-              colors={['#000000', '#4A6CF7', '#7B2FF7']}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
-              style={{ width: 40, height: 40, borderRadius: 100, alignItems: 'center', justifyContent: "center" }}
-            >
-              <TouchableOpacity>
-                <Icon name="facebook-square" size={25} color="#fff" />
-              </TouchableOpacity>
-            </LinearGradient>
-          </View>
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={styles.downContainer}
+      >
+        <ScrollView
+          contentContainerStyle={{ justifyContent: 'center', alignItems: 'center', paddingBottom: 20, gap: 29 }}
+          showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled"
+        >
           <View>
-            <Text>Sign in with another account</Text>
+            <Text style={styles.welcomeText}>Welcome back !</Text>
           </View>
-        </View>
-      </ScrollView>
-    </KeyboardAvoidingView>
+          <View style={{ gap: 25, width: "100%" }}>
+            <TextInput placeholder='Username' style={styles.textInput} value={username} onChangeText={setUsername} />
+            <TextInput placeholder='Password' style={styles.textInput} secureTextEntry value={password} onChangeText={setPassword} />
+            <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+              <TouchableOpacity >
+                <Checkbox
+                  label="Remember me"
+                  size={18}
+                  checkedColor="#7B2FF7"
+                  uncheckedColor="#999"
+                  defaultChecked={isChecked}
+                  onChange={(val) => setIsChecked(val)}
+                />
+              </TouchableOpacity>
+              <TouchableOpacity>
+                <Text>Forgot password?</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+          <View style={{ gap: 20 }}>
+            <LinearGradient
+              colors={['#000000', '#4A6CF7', '#7B2FF7']}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={{ padding: 2.5, borderRadius: 100 }}
+            >
+              <TouchableOpacity style={{ borderRadius: 100, alignItems: "center", justifyContent: 'center', backgroundColor: "#fff", padding: 10, paddingHorizontal: 140 }} onPress={() => navigation.navigate("MainDrawer")}>
+                <GradientText text="Login" style={{ fontSize: 20, fontWeight: "500" }} />
+              </TouchableOpacity>
+            </LinearGradient>
+            <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "center" }}>
+              <Text>New user? </Text>
+              <TouchableOpacity onPress={() => navigation.navigate("Register")}><GradientText text="Sign Up" style={{ fontSize: 15, fontWeight: "bold" }} /></TouchableOpacity>
+            </View>
+            <View style={{ flexDirection: "row" }}>
+              <Text style={{ opacity: 0.5 }}>_________________________  </Text>
+              <GradientText text="OR" style={{ fontSize: 15, fontWeight: "bold", top: 3 }} />
+              <Text style={{ opacity: 0.5 }}>  ________________________</Text>
+            </View>
+          </View>
+          <View style={{ gap: 10 }}>
+            <View style={styles.socialLogin}>
+              <LinearGradient
+                colors={['#000000', '#4A6CF7', '#7B2FF7']}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
+                style={{ width: 40, height: 40, borderRadius: 100, alignItems: "center", justifyContent: "center" }}
+              >
+                <TouchableOpacity>
+                  <Icon name="google" size={25} color="#fff" />
+                </TouchableOpacity>
+              </LinearGradient>
+              <LinearGradient
+                colors={['#000000', '#4A6CF7', '#7B2FF7']}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
+                style={{ width: 40, height: 40, borderRadius: 100, alignItems: 'center', justifyContent: "center" }}
+              >
+                <TouchableOpacity>
+                  <Icon name="facebook-square" size={25} color="#fff" />
+                </TouchableOpacity>
+              </LinearGradient>
+            </View>
+            <View>
+              <Text>Sign in with another account</Text>
+            </View>
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </View>
-    
+
   )
 }
 

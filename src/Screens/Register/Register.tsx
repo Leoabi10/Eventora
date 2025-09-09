@@ -1,5 +1,5 @@
-import { View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native'
-import React from 'react'
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, Alert } from 'react-native'
+import React, { useState } from 'react'
 import GradientText from '../../Components/GradientText/GradientText'
 import LinearGradient from 'react-native-linear-gradient'
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -8,12 +8,45 @@ import { useNavigation } from '@react-navigation/native';
 type Props = {}
 
 const Register = (props: Props) => {
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [repeatPassword, setRepeatPassword] = useState("");
+
     const navigation = useNavigation();
+
+    const handleRegister = async () => {
+        if (password !== repeatPassword) {
+            Alert.alert("Passwords do not match!");
+            return;
+        }
+
+        try {
+            const response = await fetch("http://192.168.1.55:5000/api/auth/register", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email, password })
+            });
+
+            const data = await response.json();
+            if (response.ok) {
+                Alert.alert("Registration successful!");
+                navigation.navigate("Login");
+            } else {
+                Alert.alert(data.message || "Registration failed");
+            }
+        } catch (error) {
+            console.error("Error:", error);
+            Alert.alert("Something went wrong!");
+        }
+    };
+
+    console.log("LINE43", password, email);
+    
     return (
         <View style={styles.container}>
             <View style={{ justifyContent: "space-evenly", backgroundColor: "white", width: "90%", height: "95%", position: "absolute", left: "5%" }}>
                 <View style={styles.registerTitle}>
-                    <TouchableOpacity onPress={() => navigation.goBack()} style={{width: "7%"}}>
+                    <TouchableOpacity onPress={() => navigation.goBack()} style={{ width: "7%" }}>
                         <Icon name="arrow-back" size={24} color="black" />
                     </TouchableOpacity>
                     <GradientText text="Create account" style={{ fontWeight: "bold", fontSize: 30, textAlign: "none" }} />
@@ -21,15 +54,23 @@ const Register = (props: Props) => {
                 </View>
                 <View style={styles.inputContainer}>
                     <Text style={styles.labelRegister}>Your email</Text>
-                    <TextInput style={styles.textInputBox} placeholder='Enter your email' />
+                    <TextInput style={styles.textInputBox} placeholder='Enter your email'
+                        value={email}
+                        onChangeText={setEmail} />
                 </View>
                 <View style={styles.inputContainer}>
                     <Text style={styles.labelRegister}>Password</Text>
-                    <TextInput style={styles.textInputBox} placeholder='Enter your password' />
+                    <TextInput style={styles.textInputBox} placeholder='Enter your password'
+                        secureTextEntry
+                        value={password}
+                        onChangeText={setPassword} />
                 </View>
                 <View style={styles.inputContainer}>
                     <Text style={styles.labelRegister}>Repeat password</Text>
-                    <TextInput style={styles.textInputBox} placeholder='Repeat password' />
+                    <TextInput style={styles.textInputBox} placeholder='Repeat password'
+                        secureTextEntry
+                        value={repeatPassword}
+                        onChangeText={setRepeatPassword} />
                 </View>
                 <View style={{ gap: 30 }}>
                     <LinearGradient
@@ -38,7 +79,7 @@ const Register = (props: Props) => {
                         end={{ x: 1, y: 1 }}
                         style={{ borderRadius: 8 }}
                     >
-                        <TouchableOpacity style={styles.RegisterButton}>
+                        <TouchableOpacity style={styles.RegisterButton} onPress={handleRegister}>
 
                             <Text style={styles.RegisterText}>Register</Text>
 
@@ -51,7 +92,7 @@ const Register = (props: Props) => {
                         end={{ x: 1, y: 1 }}
                         style={{ padding: 2.5, borderRadius: 8 }}
                     >
-                        <TouchableOpacity style={{ borderRadius: 10, alignItems: "center", justifyContent: 'center', backgroundColor: "#fff", padding: 15 }}>
+                        <TouchableOpacity style={{ borderRadius: 10, alignItems: "center", justifyContent: 'center', backgroundColor: "#fff", padding: 15 }} onPress={() => navigation.navigate("Login")}>
                             <GradientText text="Login" style={{ fontWeight: "bold", fontSize: 20 }} />
                         </TouchableOpacity>
                     </LinearGradient>

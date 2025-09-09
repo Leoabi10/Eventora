@@ -13,7 +13,7 @@ import OnboardCustomButton from '../../Components/onBoardRender/OnboardCustomBut
 import Svg, { Circle } from 'react-native-svg';
 
 const { width, height } = Dimensions.get('window');
-const CIRCLE_LENGTH = 219; // circumference
+const CIRCLE_LENGTH = 320;
 const RADIUS = CIRCLE_LENGTH / (2 * Math.PI);
 
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
@@ -74,21 +74,18 @@ function OnboardScreen() {
         }}
       />
 
-      {/* Bottom Container */}
       <View style={styles.bottomContainer}>
         <View style={styles.progressWrapper}>
           <Svg
-            width={width * 0.25} // responsive width
-            height={width * 0.25}
-            // viewBox={`0 0 ${width / 2} ${width / 2}`} // scalable viewBox
+            width={width * 0.30}
+            height={width * 0.30}
           >
-            {/* Base Circle */}
             <Circle
               cx="50%"
               cy="50%"
               r={RADIUS}
               stroke="#4285F4"
-              strokeWidth={5}
+              strokeWidth={7}
               strokeDasharray={CIRCLE_LENGTH}
               strokeDashoffset={CIRCLE_LENGTH * 1.25}
               fill="transparent"
@@ -100,7 +97,7 @@ function OnboardScreen() {
                 cy="50%"
                 r={RADIUS}
                 stroke="#EA4335"
-                strokeWidth={5}
+                strokeWidth={7}
                 strokeDasharray={CIRCLE_LENGTH}
                 animatedProps={animatedPropsTwo}
                 fill="transparent"
@@ -114,7 +111,7 @@ function OnboardScreen() {
                 cy="50%"
                 r={RADIUS}
                 stroke="#34A853"
-                strokeWidth={5}
+                strokeWidth={7}
                 strokeDasharray={CIRCLE_LENGTH}
                 animatedProps={animatedPropsThree}
                 fill="transparent"
@@ -124,7 +121,7 @@ function OnboardScreen() {
               cy="50%"
               r={RADIUS}
               stroke="#EA4335"
-              strokeWidth={5}
+              strokeWidth={7}
               strokeDasharray={CIRCLE_LENGTH}
               animatedProps={animatedPropsTwo}
               fill="transparent"
@@ -140,7 +137,7 @@ function OnboardScreen() {
                 cy="50%"
                 r={RADIUS}
                 stroke="#FBBC04"
-                strokeWidth={5}
+                strokeWidth={7}
                 strokeDasharray={CIRCLE_LENGTH}
                 animatedProps={animatedProps}
                 fill="transparent"
@@ -150,7 +147,7 @@ function OnboardScreen() {
                 cy="50%"
                 r={RADIUS}
                 stroke="#34A853"
-                strokeWidth={5}
+                strokeWidth={7}
                 strokeDasharray={CIRCLE_LENGTH}
                 animatedProps={animatedPropsThree}
                 fill="transparent"
@@ -160,7 +157,7 @@ function OnboardScreen() {
               cy="50%"
               r={RADIUS}
               stroke="#EA4335"
-              strokeWidth={5}
+              strokeWidth={7}
               strokeDasharray={CIRCLE_LENGTH}
               animatedProps={animatedPropsTwo}
               fill="transparent"
